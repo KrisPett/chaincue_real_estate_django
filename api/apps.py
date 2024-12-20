@@ -6,4 +6,5 @@ class ApiConfig(AppConfig):
     name = "api"
 
     def ready(self):
-        import api.signals
+        from api.signals import populate_default_data
+        # populate_default_data()
