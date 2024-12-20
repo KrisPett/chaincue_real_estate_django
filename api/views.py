@@ -19,12 +19,22 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
 
 
+class AccountPage(viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    
+    @action(detail=False, methods=['get'], url_path='page')
+    def account_page(self, request, *args, **kwargs):
+        print("account_page:", self.get_queryset())
+        return Response("Account Page")
+
+
 class HomePage(viewsets.ModelViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
 
     @action(detail=False, methods=['get'], url_path='page')
-    def home(self, request, *args, **kwargs):
+    def home_page(self, request, *args, **kwargs):
         print("Queryset:", self.get_queryset())
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data)
@@ -35,3 +45,23 @@ class HomePage(viewsets.ModelViewSet):
         country = CountryService().save(Country.CountryNames.SPAIN)
         serializer = self.get_serializer(country)
         return Response({"success": f"Country {country.name} saved successfully!", "data": serializer.data})
+
+
+class HousePage(viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    
+    @action(detail=False, methods=['get'], url_path='page')
+    def house_page(self, request, *args, **kwargs):
+        print("house_page:", self.get_queryset())
+        return Response("House Page")
+
+
+class HousesPage(viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+    
+    @action(detail=False, methods=['get'], url_path='page')
+    def houses_page(self, request, *args, **kwargs):
+        print("houses_page:", self.get_queryset())
+        return Response("Houses Page")
