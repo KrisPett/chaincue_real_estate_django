@@ -1,2 +1,4 @@
 psycopg2
-python-dotenv
+python-dotenv~=1.0.1
+Django~=5.1.4
+djangorestframework~=3.15.2

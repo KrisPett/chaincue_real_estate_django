@@ -1,49 +1,37 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import action
 from rest_framework.response import Response
-
 from tutorial.quickstart.serializers import GroupSerializer, UserSerializer
 
+from api.serializers import CountrySerializer
 from country.models import Country
 from country.services import CountryService
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    # permission_classes = [AllowAny]
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
     queryset = Group.objects.all().order_by('name')
     serializer_class = GroupSerializer
-    # permission_classes = )[permissions.AllowAny]
-
-    from rest_framework import viewsets
-    from country.models import Country
-    from country.services import CountryService
 
 
-class CountryViewSet(viewsets.ModelViewSet):
+class HomePage(viewsets.ModelViewSet):
     queryset = Country.objects.all()
-    serializer_class = None
+    serializer_class = CountrySerializer
 
-    def list(self, request):
-        service = CountryService()
-        countries = service.find_all()
-        return Response([{'id': c.id, 'name': c.name} for c in countries])
+    @action(detail=False, methods=['get'], url_path='page')
+    def home(self, request, *args, **kwargs):
+        print("Queryset:", self.get_queryset())
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
 
-    def create(self, request):
-        service = CountryService()
-        country_name = request.data.get('name')
-        if country_name in [choice.name for choice in Country.CountryNames]:
-            country = service.save(country_name)
-            return Response({'id': country.id, 'name': country.name}, status=201)
-        return Response({'error': 'Invalid country name'}, status=400)
+    @action(detail=False, methods=['post'], url_path='create-country')
+    def createCountry(self, request, *args, **kwargs):
+        print("Creating a new country")
+        country = CountryService().save(Country.CountryNames.SPAIN)
+        serializer = self.get_serializer(country)
+        return Response({"success": f"Country {country.name} saved successfully!", "data": serializer.data})
