@@ -7,6 +7,15 @@ python manage.py runserver
 # Setup
 
 ```
+.env
+DATABASE_NAME=chaincue-real-estate-db
+DATABASE_USER=admin
+DATABASE_PASSWORD=admin
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+```
+
+```
 docker compose up -d
 pip install -r requirements.txt
 python manage.py runserver
