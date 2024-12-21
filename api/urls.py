@@ -1,9 +1,10 @@
 from rest_framework import routers
 
-from api import views
+from api.views import AccountPage, HousePage, HousesPage, HomePage
 
 router = routers.DefaultRouter()
-router.register(r'home', views.HomePage, basename='home')
-router.register(r'account', views.AccountPage, basename='account')
-router.register(r'house', views.HousePage, basename='house')
-router.register(r'houses', views.HousesPage, basename='houses')
+
+router.register(r'account', AccountPage, basename='account')
+router.register(r'house', HousePage, basename='house')
+router.register(r'houses', HousesPage, basename='houses')
+router.register(r'home', HomePage, basename='home')
